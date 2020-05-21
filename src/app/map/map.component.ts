@@ -23,6 +23,7 @@ export class MapComponent implements OnInit {
   address: string;
   formattedAddress: string;
   foundName: string;
+  value = '';
   // list of selected points
   selectedPlaces: Array<any>;
   private geoCoder;
@@ -80,7 +81,6 @@ export class MapComponent implements OnInit {
       latitude: this.latitude,
       longitude: this.longitude
     });
-    console.log('add new place', this.selectedPlaces);
   }
 
   ngOnInit() {
@@ -107,6 +107,7 @@ export class MapComponent implements OnInit {
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
           this.zoom = 16;
+          this.onAddNewPlace(null)
         });
       });
     });

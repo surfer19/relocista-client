@@ -12,6 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,9 @@ import { MatChipsModule } from '@angular/material/chips';
     MatButtonModule,
     MatGridListModule,
     MatChipsModule,
+    MatIconModule,
+    FormsModule,
+    MatToolbarModule,
     BrowserModule,
     AppRoutingModule,
     AgmCoreModule.forRoot({

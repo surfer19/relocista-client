@@ -1,24 +1,32 @@
-<div
-  fxLayout="row"
-  fxLayout.xs="column"
-  fxLayoutGap="5px"
-  >
-  <mat-form-field class="full-width">
-    <input matInput placeholder = "Search for place" #search>
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)=onAddNewPlace($event)>
-    Add place
-  </button>
+<div class="row mt-3">
+  <div class="col-md-10">
+    <mat-form-field class="full-width">
+      <!-- <input matInput placeholder = "Search for place" #search> -->
+      <mat-label>Search for your place of interest</mat-label>
+      <input matInput type="text" [(ngModel)]="value" #search >
+      <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div class="col-md-2">
+    <button mat-raised-button color="primary" (click)=onAddNewPlace($event)>
+      <span>+ </span>
+      Add place
+    </button>
+  </div>
 </div>
-<mat-chip-list >
+
+<mat-chip-list>
   <mat-chip
     *ngFor="let place of selectedPlaces"
-    color="primary"
+    color="accent"
     [removable]="true"
     selected
+    class="mb-3"
   >
     {{place.name}}
-    <mat-icon matChipRemove>X</mat-icon>
+    <mat-icon matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
 <!-- <mat-grid-list cols="2" rowHeight="6:1"> -->
