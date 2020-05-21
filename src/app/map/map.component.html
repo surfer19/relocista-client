@@ -1,0 +1,46 @@
+<div
+  fxLayout="row"
+  fxLayout.xs="column"
+  fxLayoutGap="5px"
+  >
+  <mat-form-field class="full-width">
+    <input matInput placeholder = "Search for place" #search>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)=onAddNewPlace($event)>
+    Add place
+  </button>
+</div>
+<mat-chip-list >
+  <mat-chip
+    *ngFor="let place of selectedPlaces"
+    color="primary"
+    [removable]="true"
+    selected
+  >
+    {{place.name}}
+    <mat-icon matChipRemove>X</mat-icon>
+  </mat-chip>
+</mat-chip-list>
+<!-- <mat-grid-list cols="2" rowHeight="6:1"> -->
+  <!-- <mat-grid-tile [colspan]="1"> -->
+    <!-- <mat-form-field class="full-width">
+      <input matInput placeholder = "Search for place" #search>
+    </mat-form-field> -->
+  <!-- </mat-grid-tile> -->
+  <!-- <mat-grid-tile [colspan]="1"> -->
+    <!-- <button mat-raised-button color="primary" (click)=onAddNewPlace($event)>
+      Add place
+    </button> -->
+  <!-- </mat-grid-tile>
+</mat-grid-list> -->
+
+<agm-map
+  [latitude]="latitude"
+  [longitude]="longitude"
+  [zoom]="zoom"
+  [disableDefaultUI]="false"
+  [zoomControl]="false"
+  >
+  <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
+</agm-map>
+<!-- (dragEnd)="markerDragEnd($event)" -->
