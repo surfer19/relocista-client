@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="56px" height="93px" viewBox="0 0 56 93" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="tooltip-yellow" transform="translate(2.000000, 3.000000)">
+            <g id="tooltip-top-copy-2" stroke-width="1">
+                <rect id="BG" stroke="#EFEFEF" fill="#FF4081" x="0" y="0" width="52" height="42" rx="4"></rect>
+                <polygon id="Triangle-1" fill="#FF4081" transform="translate(25.500000, 45.500000) scale(1, -1) translate(-25.500000, -45.500000) " points="25.5 41 32 50 19 50"></polygon>
+                <path d="M31.5,42 L25.5,49.5" id="Line" stroke="#EFEFEF" stroke-linecap="square"></path>
+                <path d="M19.5,42 L25.5,49.5" id="Line-2" stroke="#EFEFEF" stroke-linecap="square"></path>
+            </g>
+            <circle id="Oval-Copy-3" fill="#EFEFEF" cx="26" cy="84" r="6"></circle>
+            <circle id="Oval-Copy-4" fill="#FF4081" cx="26" cy="84" r="4"></circle>
+            <path d="M25.5,50 L25.5,77.5" id="Line-3-Copy" stroke="#EFEFEF" stroke-width="2" fill="#EFEFEF" stroke-linecap="square" stroke-dasharray="6"></path>
+        </g>
+        <path d="M27.4981998,14.9736283 L38,26.4640109 L21.433804,31.8948284 L16.4153162,27.0953493 C12.9617097,23.7924596 12.8395297,18.3152372 16.1424194,14.8616307 C16.193403,14.8083206 16.2450662,14.7556647 16.2973964,14.7036759 C16.2973964,14.7036759 16.2973964,14.7036759 16.2973964,14.7036759 C16.2973964,14.7036759 16.2973964,14.7036759 16.2973964,14.7036759 C19.3387454,11.6821628 24.2536662,11.6982431 27.2751792,14.7395921 C27.351136,14.8160475 27.4254923,14.8940765 27.4981998,14.9736283 Z" id="Rectangle" fill="#EFEFEF"></path>
+        <path d="M38.4760289,14.6129032 L38.7127382,14.8534234 C41.6823216,17.870815 41.7869548,22.6793853 38.9514354,25.8230945 L28,37.9648306 L17.0940764,27.7382137 L27.8646463,15.0114211 C30.4295093,11.9807106 34.9656179,11.6030665 37.9963284,14.1679296 C38.1628991,14.3088968 38.322965,14.4573751 38.4760289,14.6129032 Z" id="Rectangle-Copy" fill="#EFEFEF"></path>
+    </g>
+</svg>

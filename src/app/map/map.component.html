@@ -29,26 +29,58 @@
     <mat-icon matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
-<!-- <mat-grid-list cols="2" rowHeight="6:1"> -->
-  <!-- <mat-grid-tile [colspan]="1"> -->
-    <!-- <mat-form-field class="full-width">
-      <input matInput placeholder = "Search for place" #search>
-    </mat-form-field> -->
-  <!-- </mat-grid-tile> -->
-  <!-- <mat-grid-tile [colspan]="1"> -->
-    <!-- <button mat-raised-button color="primary" (click)=onAddNewPlace($event)>
-      Add place
-    </button> -->
-  <!-- </mat-grid-tile>
-</mat-grid-list> -->
-
+<!-- [agmFitBounds]="true" -->
+<div id="floating-panel">
+  <b>Travel type: </b>
+  <select id="mode" (change)="onTravelTypeChange($event.target.value)">
+    <option value="DRIVING">Driving</option>
+    <option value="WALKING">Walking</option>
+    <option value="BICYCLING">Bicycling</option>
+    <option value="TRANSIT">Transit</option>
+  </select>
+</div>
 <agm-map
   [latitude]="latitude"
   [longitude]="longitude"
   [zoom]="zoom"
   [disableDefaultUI]="false"
-  [zoomControl]="false"
+  [mapTypeControl]="true"
+  [zoomControl]="true"
+  [styles]="themeStyle"
+  [fitBounds]="true"
+  class="map"
   >
-  <agm-marker [latitude]="latitude" [longitude]="longitude" [markerDraggable]="true"></agm-marker>
+  <agm-marker
+    *ngFor="let place of selectedPlaces"
+    [latitude]="place.lat"
+    [longitude]="place.lng"
+    [iconUrl]="{
+      url: './assets/svg/map-icon-hearth.svg',
+      labelOrigin: {x: 25,y: -10}
+    }"
+    [agmFitBounds]="selectedPlaces.length > 1 ? true : false"
+    [label]="place.labelOptions"
+  >
+
+  </agm-marker>
+  <agm-marker
+    *ngFor="let property of propertyList"
+    [latitude]="property.lat"
+    [longitude]="property.lng"
+    [iconUrl]="{
+      url: './assets/svg/map-icon-home.svg'
+    }"
+    (markerClick)="onMarkerClick(property)"
+  >
+  </agm-marker>
+  <div *ngIf="selectedPlaces?.length && selectedPlaces?.length">
+    <agm-direction
+      *ngFor="let route of selectedRoutes"
+      [origin]="route.origin"
+      [destination]="route.destination"
+      [renderOptions]="renderOptions1"
+      [travelMode]="'TRANSIT'"
+    ></agm-direction>
+  </div>
 </agm-map>
-<!-- (dragEnd)="markerDragEnd($event)" -->
+<!-- [waypoints]="waypoints" -->

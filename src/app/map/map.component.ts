@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
+import { gMapThemeStyles, mockSelectedPlaces, mockPropertyList } from './map.constants';
 
 interface Marker {
   lat: number;
@@ -7,6 +8,7 @@ interface Marker {
   label?: string;
   draggable: boolean;
 }
+
 declare var google: any;
 
 @Component({
@@ -16,6 +18,14 @@ declare var google: any;
 })
 
 export class MapComponent implements OnInit {
+  options;
+  constructor(
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone,
+  ) {
+    this.selectedPlaces = [];
+    this.propertyList = [];
+  }
   // current selected point
   latitude: number;
   longitude: number;
@@ -25,16 +35,44 @@ export class MapComponent implements OnInit {
   foundName: string;
   value = '';
   // list of selected points
-  selectedPlaces: Array<any>;
+  selectedPlaces;
+  propertyList: Array<any>;
+  selectedRoutes: Array<any>;
+  themeStyle = gMapThemeStyles;
+  public renderOptions1 = {
+    suppressMarkers: true,
+    preserveViewport: true,
+  };
+  public renderOptions2 = {
+    suppressMarkers: true,
+    preserveViewport: true,
+    polylineOptions: {
+      strokeColor: '#0f0',
+    }
+  };
+  public done = false;
   private geoCoder;
 
+  labelOrigin = {
+    x: 12,
+    y: 27
+  };
   @ViewChild('search')
   public searchElementRef: ElementRef;
 
-  constructor(
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone
-  ) { }
+  labelOptions = {
+    color: 'white',
+    fontFamily: '',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    position: 'absolute',
+    left: '-26px',
+    bottom: '-20px',
+    background: '#ff4080',
+    padding: '1px 5px',
+    borderRadius: '5px',
+    // text: 'text',
+  };
 
   // Get Current Location Coordinates
   private setCurrentLocation() {
@@ -47,45 +85,90 @@ export class MapComponent implements OnInit {
     }
   }
 
-  // markerDragEnd($event: MouseEvent) {
-  //   console.log($event);
-  //   this.latitude = $event.coords.lat;
-  //   this.longitude = $event.coords.lng;
-  //   this.getAddress(this.latitude, this.longitude);
-  //   // console.log('foundAddress', foundAddress);
-  // }
-
-  private getAddress(latitude, longitude) {
-    this.geoCoder.geocode({ location: { lat: latitude, lng: longitude } }, (results, status) => {
-      console.log(results);
-      console.log(status);
-      if (status === 'OK') {
-        if (results[0]) {
-          this.zoom = 12;
-          this.address = results[0].formatted_address;
-          console.log('get this.address', this.address);
-        } else {
-          window.alert('No results found');
-        }
-      } else {
-        window.alert('Geocoder failed due to: ' + status);
-      }
-
-    });
-  }
-
   public onAddNewPlace(e) {
     this.selectedPlaces.push({
       formattedAddress: this.formattedAddress,
       name: this.foundName,
-      latitude: this.latitude,
-      longitude: this.longitude
+      lat: this.latitude,
+      lng: this.longitude
+    });
+    console.log('selectedPlaces', this.selectedPlaces);
+  }
+  async calcTimeTravel(marker) {
+    console.log('predtym', this.selectedPlaces);
+    const updatedPlaces = this.selectedPlaces.map(async selectedPlace => {
+      const request = {
+        origin: {
+          lat: marker.lat,
+          lng: marker.lng
+        },
+        destination: {
+          lat: selectedPlace.lat,
+          lng: selectedPlace.lng
+        },
+        travelMode: 'TRANSIT'
+      };
+      const response = await this.mapRoute(request);
+      return {
+          ...selectedPlace,
+          labelOptions: {
+            ...this.labelOptions,
+            text: response.routes[0].legs[0].duration.text
+          }
+        };
+    });
+    console.log('updatedPlaces', await Promise.all(updatedPlaces));
+    this.selectedPlaces = await Promise.all(updatedPlaces);
+  }
+
+  mapRoute(request): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const directionsService = new google.maps.DirectionsService();
+      directionsService.route(request, (dr, status) => {
+        if (status === 'OK') {
+          resolve(dr);
+        } else {
+          reject(status);
+        }
+      });
     });
   }
 
+  onMarkerClick(marker) {
+    console.log('marker', marker);
+    this.setSelectedRoutes(marker);
+    this.calcTimeTravel(marker);
+  }
+
+  setSelectedRoutes(property) {
+    const routes = this.selectedPlaces.map(selectedPlace => ({
+        origin: {
+          lat: property.lat,
+          lng: property.lng
+        },
+        destination: {
+          lat: selectedPlace.lat,
+          lng: selectedPlace.lng
+        }
+    }));
+    console.log('routes', routes);
+    this.selectedRoutes = routes;
+  }
+
+  onTravelTypeChange(value) {
+    console.log('value', value);
+  }
+
   ngOnInit() {
-    this.selectedPlaces = [];
-    this.setCurrentLocation();
+    this.options = {
+      style: 'HORIZONTAL_BAR', // google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: 'TOP_CENTER', // google.maps.ControlPosition.TOP_CENTER
+    };
+    console.log('styles', gMapThemeStyles);
+    // setTimeout(() => { this.done = true; }, 1500);
+    this.selectedPlaces = mockSelectedPlaces(this.labelOptions);
+    this.propertyList = mockPropertyList();
+    // this.setCurrentLocation();
     // load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
       // this.setCurrentLocation();
@@ -107,7 +190,7 @@ export class MapComponent implements OnInit {
           this.latitude = place.geometry.location.lat();
           this.longitude = place.geometry.location.lng();
           this.zoom = 16;
-          this.onAddNewPlace(null)
+          this.onAddNewPlace(null);
         });
       });
     });

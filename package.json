@@ -12,6 +12,8 @@
   "private": true,
   "dependencies": {
     "@agm/core": "^1.1.0",
+    "@ajqua/core": "^1.0.0-beta.4d",
+    "@ajqua/marker-with-label": "git+https://github.com/braxtondiggs/marker-with-label.git#ccd8b42561924be848e5734a5d818259d155b448",
     "@angular/animations": "~9.1.7",
     "@angular/cdk": "^9.2.4",
     "@angular/common": "~9.1.7",
@@ -25,6 +27,7 @@
     "@angular/router": "~9.1.7",
     "agm-direction": "^0.7.9",
     "bootstrap": "^4.5.0",
+    "markerwithlabel": "^2.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
