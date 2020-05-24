@@ -25,6 +25,7 @@ export class MapComponent implements OnInit {
   ) {
     this.selectedPlaces = [];
     this.propertyList = [];
+    this.defaultTravelType = 'TRANSIT';
   }
   // current selected point
   latitude: number;
@@ -35,9 +36,12 @@ export class MapComponent implements OnInit {
   foundName: string;
   value = '';
   // list of selected points
-  selectedPlaces;
+  selectedPlaces: Array<any>;
   propertyList: Array<any>;
   selectedRoutes: Array<any>;
+  selectedTravelType: string;
+  defaultTravelType: string;
+  selectedProperty: string;
   themeStyle = gMapThemeStyles;
   public renderOptions1 = {
     suppressMarkers: true,
@@ -95,7 +99,6 @@ export class MapComponent implements OnInit {
     console.log('selectedPlaces', this.selectedPlaces);
   }
   async calcTimeTravel(marker) {
-    console.log('predtym', this.selectedPlaces);
     const updatedPlaces = this.selectedPlaces.map(async selectedPlace => {
       const request = {
         origin: {
@@ -106,7 +109,7 @@ export class MapComponent implements OnInit {
           lat: selectedPlace.lat,
           lng: selectedPlace.lng
         },
-        travelMode: 'TRANSIT'
+        travelMode: this.selectedTravelType || this.defaultTravelType
       };
       const response = await this.mapRoute(request);
       return {
@@ -117,7 +120,7 @@ export class MapComponent implements OnInit {
           }
         };
     });
-    console.log('updatedPlaces', await Promise.all(updatedPlaces));
+
     this.selectedPlaces = await Promise.all(updatedPlaces);
   }
 
@@ -135,7 +138,8 @@ export class MapComponent implements OnInit {
   }
 
   onMarkerClick(marker) {
-    console.log('marker', marker);
+    this.selectedProperty = marker;
+    // console.log('marker', marker);
     this.setSelectedRoutes(marker);
     this.calcTimeTravel(marker);
   }
@@ -156,24 +160,20 @@ export class MapComponent implements OnInit {
   }
 
   onTravelTypeChange(value) {
-    console.log('value', value);
+    this.selectedTravelType = value;
+    this.calcTimeTravel(this.selectedProperty);
   }
 
   ngOnInit() {
-    this.options = {
-      style: 'HORIZONTAL_BAR', // google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-      position: 'TOP_CENTER', // google.maps.ControlPosition.TOP_CENTER
-    };
-    console.log('styles', gMapThemeStyles);
-    // setTimeout(() => { this.done = true; }, 1500);
+    // this.options = {
+    //   style: 'HORIZONTAL_BAR', // google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+    //   position: 'TOP_CENTER', // google.maps.ControlPosition.TOP_CENTER
+    // };
     this.selectedPlaces = mockSelectedPlaces(this.labelOptions);
     this.propertyList = mockPropertyList();
     // this.setCurrentLocation();
     // load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
-      // this.setCurrentLocation();
-      // this.geoCoder = new google.maps.Geocoder();
-
       const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
       autocomplete.addListener('place_changed', () => {
         this.ngZone.run(() => {

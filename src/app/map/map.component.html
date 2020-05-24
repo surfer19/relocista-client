@@ -17,7 +17,7 @@
   </div>
 </div>
 
-<mat-chip-list>
+<mat-chip-list class="chip-list">
   <mat-chip
     *ngFor="let place of selectedPlaces"
     color="accent"
@@ -33,10 +33,10 @@
 <div id="floating-panel">
   <b>Travel type: </b>
   <select id="mode" (change)="onTravelTypeChange($event.target.value)">
+    <option value="TRANSIT">Transit</option>
     <option value="DRIVING">Driving</option>
     <option value="WALKING">Walking</option>
     <option value="BICYCLING">Bicycling</option>
-    <option value="TRANSIT">Transit</option>
   </select>
 </div>
 <agm-map
@@ -47,6 +47,7 @@
   [mapTypeControl]="true"
   [zoomControl]="true"
   [styles]="themeStyle"
+  [fullscreenControl]="true"
   [fitBounds]="true"
   class="map"
   >
@@ -79,7 +80,7 @@
       [origin]="route.origin"
       [destination]="route.destination"
       [renderOptions]="renderOptions1"
-      [travelMode]="'TRANSIT'"
+      [travelMode]="selectedTravelType || defaultTravelType"
     ></agm-direction>
   </div>
 </agm-map>
