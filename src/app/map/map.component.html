@@ -51,6 +51,7 @@
   [fitBounds]="true"
   class="map"
   >
+
   <agm-marker
     *ngFor="let place of selectedPlaces"
     [latitude]="place.lat"
@@ -65,14 +66,22 @@
 
   </agm-marker>
   <agm-marker
-    *ngFor="let property of propertyList"
+    *ngFor="let property of propertyList; index as i;"
     [latitude]="property.lat"
     [longitude]="property.lng"
     [iconUrl]="{
       url: './assets/svg/map-icon-home.svg'
     }"
-    (markerClick)="onMarkerClick(property)"
+    (markerClick)="onMarkerClick(property)">
   >
+    <agm-info-window
+      *ngIf="i===0"
+      [isOpen]="true"
+      [maxWidth]="133"
+      disableAutoPan
+    >
+      <strong>Click to home</strong> in order to show travel time  to your points of interest!
+    </agm-info-window>
   </agm-marker>
   <div *ngIf="selectedPlaces?.length && selectedPlaces?.length">
     <agm-direction

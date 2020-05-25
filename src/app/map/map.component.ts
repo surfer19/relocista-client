@@ -44,6 +44,7 @@ export class MapComponent implements OnInit {
   defaultTravelType: string;
   selectedProperty: string;
   themeStyle = gMapThemeStyles;
+  infoWindow: any;
   public renderOptions1 = {
     suppressMarkers: true,
     preserveViewport: true,
@@ -172,7 +173,15 @@ export class MapComponent implements OnInit {
     this.calcTimeTravel(this.selectedProperty);
   }
 
+  closeInfoPopup(popup) {
+    console.log('popup', popup);
+  }
+
   ngOnInit() {
+    // setTimeout(
+    //   function(){
+    //     this.infoWindow.close();
+    //   }, 3000);
     // this.options = {
     //   style: 'HORIZONTAL_BAR', // google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
     //   position: 'TOP_CENTER', // google.maps.ControlPosition.TOP_CENTER
