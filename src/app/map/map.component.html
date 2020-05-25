@@ -26,7 +26,7 @@
     class="mb-3"
   >
     {{place.name}}
-    <mat-icon matChipRemove>cancel</mat-icon>
+    <mat-icon (click)="onRemovePlace(place.id)" matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
 <!-- [agmFitBounds]="true" -->

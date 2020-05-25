@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
 import { gMapThemeStyles, mockSelectedPlaces, mockPropertyList } from './map.constants';
+import * as uuid from 'uuid';
 
 interface Marker {
   lat: number;
@@ -91,6 +92,7 @@ export class MapComponent implements OnInit {
 
   public onAddNewPlace(e) {
     this.selectedPlaces.push({
+      id: uuid.v4(),
       formattedAddress: this.formattedAddress,
       name: this.foundName,
       lat: this.latitude,
@@ -98,6 +100,12 @@ export class MapComponent implements OnInit {
     });
     console.log('selectedPlaces', this.selectedPlaces);
   }
+
+  public onRemovePlace(id) {
+    console.log('filter', this.selectedPlaces.filter(place => place.id !== id));
+    this.selectedPlaces = this.selectedPlaces.filter(place => place.id !== id);
+  }
+
   async calcTimeTravel(marker) {
     const updatedPlaces = this.selectedPlaces.map(async selectedPlace => {
       const request = {

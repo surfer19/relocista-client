@@ -1,3 +1,5 @@
+import * as uuid from 'uuid';
+
 export const mockPropertyList = () => ([
   {
     lat: +49.22415420000001,
@@ -10,6 +12,7 @@ export const mockPropertyList = () => ([
 ]);
 
 export const mockSelectedPlaces = (labelOptions) => ([{
+  id: uuid.v4(),
   formattedAddress: 'Fakulta informačních technologií Vysokého učení technického v Brně, Božetěchova 1/2, 612 66 Brno-Královo Pole, Česko',
   lat: +49.22685420000001,
   lng: +16.5969078,
@@ -20,6 +23,7 @@ export const mockSelectedPlaces = (labelOptions) => ([{
   }
 },
 {
+  id: uuid.v4(),
   formattedAddress: 'Purkyňova 99, 612 00 Brno-Brno-Královo Pole, Česko',
   lat: 49.2260795,
   lng: 16.581219,
