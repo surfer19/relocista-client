@@ -49,6 +49,8 @@
   [styles]="themeStyle"
   [fullscreenControl]="true"
   [fitBounds]="true"
+  (mapClick)="setMapStateDefault($event)"
+  (zoomChange)="onZoomChange($event)"
   class="map"
   >
 
@@ -58,31 +60,70 @@
     [longitude]="place.lng"
     [iconUrl]="{
       url: './assets/svg/map-icon-hearth.svg',
-      labelOrigin: {x: 25,y: -10}
+      labelOrigin: {x: 25,y: -10},
+      zIndex: 0
     }"
-    [agmFitBounds]="selectedPlaces.length > 1 ? true : false"
+
     [label]="place.labelOptions"
   >
-
+  <!-- [agmFitBounds]="selectedPlaces.length > 1 ? true : false" -->
   </agm-marker>
-  <agm-marker
-    *ngFor="let property of propertyList; index as i;"
-    [latitude]="property.lat"
-    [longitude]="property.lng"
-    [iconUrl]="{
-      url: './assets/svg/map-icon-home.svg'
-    }"
-    (markerClick)="onMarkerClick(property)">
-  >
-    <agm-info-window
+  <agm-marker-cluster [styles]="clusterStyles">
+    <!-- imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m" -->
+    <agm-marker
+      *ngFor="let property of propertyList; index as i;"
+      [latitude]="property.lat"
+      [longitude]="property.lng"
+      [iconUrl]="{
+        url: './assets/svg/map-icon-home2.svg'
+      }"
+      [agmFitBounds]="true"
+      (markerClick)="onMarkerClick(property)"
+      (mouseClick)="onMouseClick(infoWindow, $event)"
+      >
+    >
+      <agm-info-window [disableAutoPan]="false" #infoWindow>
+        <div class="container-fluid info-window">
+          <div class="row">
+            <div *ngFor="let image of property.imageUrls; index as idx;">
+              <div class="col-md-6" *ngIf="idx < 2">
+                <img alt="photo" [src]="image" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <h3>{{property.title}}</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h4><strong>Type:</strong> {{property.offerType}}</h4>
+            </div>
+            <div class="col-md-6">
+              <h4><strong>Area:</strong> {{property.livingArea}} m2</h4>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h4><strong>Price:</strong> {{property.price}} {{property.priceCurrency}} / {{property.priceType}}</h4>
+            </div>
+            <div class="col-md-6">
+              <a [attr.href]="property.url" target="_blank">External link</a>
+            </div>
+          </div>
+        </div>
+      </agm-info-window>
+    </agm-marker>
+  </agm-marker-cluster>
+  <!-- <agm-info-window
       *ngIf="i===0"
       [isOpen]="true"
       [maxWidth]="133"
       disableAutoPan
     >
       <strong>Click to home</strong> in order to show travel time  to your points of interest!
-    </agm-info-window>
-  </agm-marker>
+    </agm-info-window> -->
   <div *ngIf="selectedPlaces?.length && selectedPlaces?.length">
     <agm-direction
       *ngFor="let route of selectedRoutes"

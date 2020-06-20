@@ -6,6 +6,15 @@ agm-map {
   background: red;
 }
 
+
+.info-window {
+  max-width: 24rem!important;
+}
+
+.info-window img {
+  max-width: 10rem;
+}
+
 #floating-panel {
   position: absolute;
   top: 8.2rem;

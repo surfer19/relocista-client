@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AgmCoreModule } from '@agm/core';
+import { AgmJsMarkerClustererModule } from '@agm/js-marker-clusterer';
+import { HttpClientModule } from '@angular/common/http';
 import { AgmDirectionModule } from 'agm-direction';   // agm-direction
 
 import { AppRoutingModule } from './app-routing.module';
@@ -22,6 +24,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MapComponent
   ],
   imports: [
+    HttpClientModule,
     MatInputModule,
     MatButtonModule,
     MatGridListModule,
@@ -36,6 +39,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
       libraries: ['places']
     }),
     AgmDirectionModule,
+    AgmJsMarkerClustererModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
   ],

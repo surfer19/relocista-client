@@ -1,14 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
-import { gMapThemeStyles, mockSelectedPlaces, mockPropertyList } from './map.constants';
+import { Observable, merge } from 'rxjs';
+import { mergeMap, shareReplay} from 'rxjs/operators';
+import { gMapThemeStyles, mockSelectedPlaces, clusterStyles, clusterStylesTransparent } from './map.constants';
 import * as uuid from 'uuid';
-
-interface Marker {
-  lat: number;
-  lng: number;
-  label?: string;
-  draggable: boolean;
-}
 
 declare var google: any;
 
@@ -23,11 +19,14 @@ export class MapComponent implements OnInit {
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
+    private http: HttpClient,
   ) {
     this.selectedPlaces = [];
     this.propertyList = [];
     this.defaultTravelType = 'TRANSIT';
+    this.clusterStyles = clusterStyles();
   }
+  observableList: any; // Observable<any>;
   // current selected point
   latitude: number;
   longitude: number;
@@ -45,9 +44,10 @@ export class MapComponent implements OnInit {
   selectedProperty: string;
   themeStyle = gMapThemeStyles;
   infoWindow: any;
+  clusterStyles: any;
   public renderOptions1 = {
     suppressMarkers: true,
-    preserveViewport: true,
+    preserveViewport: false,
   };
   public renderOptions2 = {
     suppressMarkers: true,
@@ -79,6 +79,11 @@ export class MapComponent implements OnInit {
     borderRadius: '5px',
     // text: 'text',
   };
+
+  setMapStateDefault(event) {
+    this.clusterStyles = clusterStyles();
+    console.log('setMapStateDefault');
+  }
 
   // Get Current Location Coordinates
   private setCurrentLocation() {
@@ -146,12 +151,23 @@ export class MapComponent implements OnInit {
     });
   }
 
+  onZoomChange(event) {
+    console.log('event', event);
+  }
+
   onMarkerClick(marker) {
     this.selectedProperty = marker;
     // console.log('marker', marker);
     this.setSelectedRoutes(marker);
     this.calcTimeTravel(marker);
+
+    console.log('clusterStylesTransparent');
+    this.clusterStyles = clusterStylesTransparent();
   }
+
+  // manageActiveProperties(activeMarker) {
+
+  // }
 
   setSelectedRoutes(property) {
     const routes = this.selectedPlaces.map(selectedPlace => ({
@@ -177,17 +193,54 @@ export class MapComponent implements OnInit {
     console.log('popup', popup);
   }
 
+  convertToGoogleLatLong(notStructuredItems) {
+    console.log('notStructuredItems', notStructuredItems);
+    // console.log('LENGTH=', notStructuredItems.filter(item => item.city === 'Brno'));
+    const googleItems = notStructuredItems.filter(item => item.city === 'Brno').slice(0, 100).map(item => (
+      {
+        ...item,
+        lat: item.gpsCoord.lat,
+        lng: item.gpsCoord.lon
+      }
+    ));
+    return googleItems;
+  }
+  onMouseClick(infoWindow, $event: MouseEvent) {
+    infoWindow.open();
+  }
+
+  // onMouseOut(infoWindow, $event: MouseEvent) {
+  //   infoWindow.close();
+  // }
+
   ngOnInit() {
-    // setTimeout(
-    //   function(){
-    //     this.infoWindow.close();
-    //   }, 3000);
-    // this.options = {
-    //   style: 'HORIZONTAL_BAR', // google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-    //   position: 'TOP_CENTER', // google.maps.ControlPosition.TOP_CENTER
-    // };
+    this.zoom = 20;
+    const storedItems: any = localStorage.getItem('properties');
+    console.log('storedItems', storedItems);
+    if (!storedItems) {
+    // get dataset
+    this.observableList = this.http
+      .get('https://api.apify.com/v2/datasets?token=Wwzi7SxDdoF5wbv8wnh7Lwbui')
+      .pipe(
+        mergeMap((resDataset: any) => {
+          return this.http.get(`
+            https://api.apify.com/v2/datasets/${resDataset.data.items[0].id}/items?token=Wwzi7SxDdoF5wbv8wnh7Lwbui&unwind=data
+          `);
+          // return resDataset;
+        }),
+        shareReplay({ bufferSize: 1, refCount: true }),
+      )
+      .subscribe(response => {
+        console.log('watafaq', response);
+        this.propertyList = this.convertToGoogleLatLong(response); // mockPropertyList();
+        localStorage.setItem('properties', JSON.stringify(this.convertToGoogleLatLong(response)));
+      });
+    }
+    else {
+      this.propertyList = JSON.parse(storedItems);
+    }
+    console.log('propertyList', this.propertyList);
     this.selectedPlaces = mockSelectedPlaces(this.labelOptions);
-    this.propertyList = mockPropertyList();
     // this.setCurrentLocation();
     // load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
