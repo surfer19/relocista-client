@@ -1,7 +1,6 @@
-<div class="row mt-3">
+<!-- <div class="row mt-3">
   <div class="col-md-10">
     <mat-form-field class="full-width">
-      <!-- <input matInput placeholder = "Search for place" #search> -->
       <mat-label>Search for your place of interest</mat-label>
       <input matInput type="text" [(ngModel)]="value" #search >
       <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
@@ -15,7 +14,7 @@
       Add place
     </button>
   </div>
-</div>
+</div> -->
 
 <mat-chip-list class="chip-list">
   <mat-chip
@@ -30,7 +29,7 @@
   </mat-chip>
 </mat-chip-list>
 <!-- [agmFitBounds]="true" -->
-<div id="floating-panel">
+<!-- <div id="floating-panel">
   <b>Travel type: </b>
   <select id="mode" (change)="onTravelTypeChange($event.target.value)">
     <option value="TRANSIT">Transit</option>
@@ -38,7 +37,7 @@
     <option value="WALKING">Walking</option>
     <option value="BICYCLING">Bicycling</option>
   </select>
-</div>
+</div> -->
 <agm-map
   [latitude]="latitude"
   [longitude]="longitude"
@@ -124,7 +123,7 @@
     >
       <strong>Click to home</strong> in order to show travel time  to your points of interest!
     </agm-info-window> -->
-  <div *ngIf="selectedPlaces?.length && selectedPlaces?.length">
+  <!-- <div *ngIf="selectedPlaces?.length && selectedPlaces?.length">
     <agm-direction
       *ngFor="let route of selectedRoutes"
       [origin]="route.origin"
@@ -132,6 +131,6 @@
       [renderOptions]="renderOptions1"
       [travelMode]="selectedTravelType || defaultTravelType"
     ></agm-direction>
-  </div>
+  </div> -->
 </agm-map>
 <!-- [waypoints]="waypoints" -->
