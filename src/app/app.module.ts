@@ -15,13 +15,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule } from '@angular/forms';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { FormsModule } from '@angular/forms';
+import { MapSideNavComponent } from './map-side-nav/map-side-nav.component';
+import { TabPanelComponent } from './tab-panel/tab-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    MapSideNavComponent,
+    TabPanelComponent
   ],
   imports: [
     HttpClientModule,
@@ -30,8 +36,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatGridListModule,
     MatChipsModule,
     MatIconModule,
-    FormsModule,
+    MatSidenavModule,
     MatToolbarModule,
+    MatTabsModule,
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     AgmCoreModule.forRoot({

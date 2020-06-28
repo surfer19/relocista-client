@@ -162,7 +162,7 @@ export class MapComponent implements OnInit {
     this.calcTimeTravel(marker);
 
     console.log('clusterStylesTransparent');
-    this.clusterStyles = clusterStylesTransparent();
+    // this.clusterStyles = clusterStylesTransparent();
   }
 
   // manageActiveProperties(activeMarker) {

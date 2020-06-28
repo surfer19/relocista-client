@@ -1,0 +1,20 @@
+.example-container {
+  position: absolute;
+  height: 95vh;
+  width: 40%;
+  right: 0;
+  // top: 52;
+}
+
+.example-sidenav-content {
+  display: flex;
+  width: 25%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  width: 100%;
+  padding: 10px;
+}
