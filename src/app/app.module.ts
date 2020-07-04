@@ -18,16 +18,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
-import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MapSideNavComponent } from './map-side-nav/map-side-nav.component';
 import { TabPanelComponent } from './tab-panel/tab-panel.component';
+import { FormFieldComponent } from './form-field/form-field.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
     MapSideNavComponent,
-    TabPanelComponent
+    TabPanelComponent,
+    FormFieldComponent,
   ],
   imports: [
     HttpClientModule,
@@ -39,6 +42,7 @@ import { TabPanelComponent } from './tab-panel/tab-panel.component';
     MatSidenavModule,
     MatToolbarModule,
     MatTabsModule,
+    MatSelectModule,
     FormsModule,
     BrowserModule,
     AppRoutingModule,
@@ -50,6 +54,7 @@ import { TabPanelComponent } from './tab-panel/tab-panel.component';
     AgmJsMarkerClustererModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

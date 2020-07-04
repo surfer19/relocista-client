@@ -71,8 +71,8 @@
     <!-- imagePath="https://raw.githubusercontent.com/googlemaps/v3-utility-library/master/markerclustererplus/images/m" -->
     <agm-marker
       *ngFor="let property of propertyList; index as i;"
-      [latitude]="property.lat"
-      [longitude]="property.lng"
+      [latitude]="property.gpsCoord.lat"
+      [longitude]="property.gpsCoord.lon"
       [iconUrl]="{
         url: './assets/svg/map-icon-home2.svg'
       }"

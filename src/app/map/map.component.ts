@@ -1,3 +1,4 @@
+import { PropertyService } from './../property.service';
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MapsAPILoader, MouseEvent } from '@agm/core';
@@ -5,6 +6,7 @@ import { Observable, merge } from 'rxjs';
 import { mergeMap, shareReplay} from 'rxjs/operators';
 import { gMapThemeStyles, mockSelectedPlaces, clusterStyles, clusterStylesTransparent } from './map.constants';
 import * as uuid from 'uuid';
+import { Property } from '../property';
 
 declare var google: any;
 
@@ -20,11 +22,12 @@ export class MapComponent implements OnInit {
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
     private http: HttpClient,
+    private propertyService: PropertyService,
   ) {
     this.selectedPlaces = [];
-    this.propertyList = [];
     this.defaultTravelType = 'TRANSIT';
     this.clusterStyles = clusterStyles();
+    this.propertyList = [];
   }
   observableList: any; // Observable<any>;
   // current selected point
@@ -37,7 +40,7 @@ export class MapComponent implements OnInit {
   value = '';
   // list of selected points
   selectedPlaces: Array<any>;
-  propertyList: Array<any>;
+  propertyList: Array<Property>;
   selectedRoutes: Array<any>;
   selectedTravelType: string;
   defaultTravelType: string;
@@ -165,9 +168,13 @@ export class MapComponent implements OnInit {
     // this.clusterStyles = clusterStylesTransparent();
   }
 
-  // manageActiveProperties(activeMarker) {
-
-  // }
+  getProperties(): void {
+    this.propertyService.getProperties()
+      .subscribe(properties => {
+        console.log('prop from api', properties);
+        this.propertyList = properties;
+      });
+  }
 
   setSelectedRoutes(property) {
     const routes = this.selectedPlaces.map(selectedPlace => ({
@@ -196,7 +203,7 @@ export class MapComponent implements OnInit {
   convertToGoogleLatLong(notStructuredItems) {
     console.log('notStructuredItems', notStructuredItems);
     // console.log('LENGTH=', notStructuredItems.filter(item => item.city === 'Brno'));
-    const googleItems = notStructuredItems.filter(item => item.city === 'Brno').slice(0, 100).map(item => (
+    const googleItems = notStructuredItems.filter(item => item.city === 'Brno').map(item => (// .slice(0, 100)
       {
         ...item,
         lat: item.gpsCoord.lat,
@@ -209,36 +216,34 @@ export class MapComponent implements OnInit {
     infoWindow.open();
   }
 
-  // onMouseOut(infoWindow, $event: MouseEvent) {
-  //   infoWindow.close();
-  // }
-
   ngOnInit() {
     this.zoom = 20;
-    const storedItems: any = localStorage.getItem('properties');
-    console.log('storedItems', storedItems);
-    if (!storedItems) {
-    // get dataset
-    this.observableList = this.http
-      .get('https://api.apify.com/v2/datasets?token=Wwzi7SxDdoF5wbv8wnh7Lwbui')
-      .pipe(
-        mergeMap((resDataset: any) => {
-          return this.http.get(`
-            https://api.apify.com/v2/datasets/${resDataset.data.items[0].id}/items?token=Wwzi7SxDdoF5wbv8wnh7Lwbui&unwind=data
-          `);
-          // return resDataset;
-        }),
-        shareReplay({ bufferSize: 1, refCount: true }),
-      )
-      .subscribe(response => {
-        console.log('watafaq', response);
-        this.propertyList = this.convertToGoogleLatLong(response); // mockPropertyList();
-        localStorage.setItem('properties', JSON.stringify(this.convertToGoogleLatLong(response)));
-      });
-    }
-    else {
-      this.propertyList = JSON.parse(storedItems);
-    }
+    this.getProperties();
+    // const storedItems: any = localStorage.getItem('properties');
+    // console.log('storedItems', storedItems);
+    // if (!storedItems) {
+    // // get dataset
+    // this.observableList = this.http
+    //   .get('https://api.apify.com/v2/datasets?token=Wwzi7SxDdoF5wbv8wnh7Lwbui')
+    //   .pipe(
+    //     mergeMap((resDataset: any) => {
+    //       return this.http.get(`
+    //       http://localhost:4000/properties?startDate=2020-05-27T12:11:07.607Z&endDate=2020-06-29T12:11:07.607Z&city=Brno
+    //       `);
+    //       // https://api.apify.com/v2/datasets/${resDataset.data.items[0].id}/items?token=Wwzi7SxDdoF5wbv8wnh7Lwbui&unwind=data&limit=2000
+    //       // return resDataset;
+    //     }),
+    //     shareReplay({ bufferSize: 1, refCount: true }),
+    //   )
+    //   .subscribe(response => {
+    //     console.log('watafaq', response);
+    //     this.propertyList = this.convertToGoogleLatLong(response); // mockPropertyList();
+    //     localStorage.setItem('properties', JSON.stringify(this.convertToGoogleLatLong(response)));
+    //   });
+    // }
+    // else {
+    //   this.propertyList = JSON.parse(storedItems);
+    // }
     console.log('propertyList', this.propertyList);
     this.selectedPlaces = mockSelectedPlaces(this.labelOptions);
     // this.setCurrentLocation();

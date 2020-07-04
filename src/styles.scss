@@ -1,11 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'bootstrap/dist/css/bootstrap-grid.min.css';
+// @import 'bootstrap/dist/css/bootstrap-grid.min.css';
 // required
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
+// @import "node_modules/bootstrap/scss/functions";
+// @import "node_modules/bootstrap/scss/variables";
+// @import "node_modules/bootstrap/scss/mixins";
+// @import "node_modules/bootstrap/scss/grid";
+// @import "node_modules/bootstrap/scss/navbar";
+// @import "node_modules/bootstrap/scss/forms";
+// @import "bootstrap/scss/utilities/_spacing.scss";
 
-@import "bootstrap/scss/utilities/_spacing.scss";
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+
 
 html, body { height: 100%; }
 body {
@@ -16,4 +21,25 @@ body {
 
 .full-width {
   width: 100%;
+}
+
+.multi-select .mat-form-field-underline {
+  height: 0!important;
+  display: none;
+}
+
+.multi-select {
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding-bottom: 0.8em;
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+  .mat-form-field-flex {
+    padding: 0em 1em;
+  }
+}
+
+.form-wrapper {
+  overflow: hidden;
 }

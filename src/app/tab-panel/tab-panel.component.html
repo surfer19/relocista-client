@@ -1,0 +1,80 @@
+<mat-tab-group [backgroundColor]="background" mat-stretch-tabs>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon >filter_list</mat-icon>
+    </ng-template>
+
+    <mat-tab-group
+      mat-align-tabs="center"
+      selectedIndex="0"
+      (selectedIndexChange)="onPropertyTypeChange($event)"
+    >
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon >apartment</mat-icon>
+        </ng-template>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon >home</mat-icon>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+    <div class="form-wrapper p-2">
+      <div class="row mt-4">
+        <div class="col-md-12">
+          <form-field
+            label="City"
+            hint="Choose city you want to filter."
+            inputValue="Brno"
+          ></form-field>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-6">
+          <form-field
+            label="FROM"
+            hint="Choose lowest price range."
+            inputValue="5000"
+            suffix="CZK"
+          ></form-field>
+        </div>
+        <div class="col-6">
+          <form-field
+            label="TO"
+            hint="Choose highest price range."
+            inputValue="10000"
+            suffix="CZK"
+          ></form-field>
+        </div>
+      </div>
+      <div class="row mt-4" *ngIf="!selectedPropertyType">
+        <div class="col-md-12">
+          <mat-form-field class="multi-select full-width">
+            <mat-label>Property types</mat-label>
+            <mat-select [formControl]="properties" multiple>
+              <mat-option *ngFor="let property of propertyTypeList" [value]="property">{{property}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row text-right mt-4">
+        <div class="col-md-12">
+          <button mat-raised-button color="accent">Search</button>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>bar_chart</mat-icon>
+    </ng-template>
+    STATISTICS
+  </mat-tab>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon>notifications_none</mat-icon>
+    </ng-template>
+    ALERTS
+  </mat-tab>
+</mat-tab-group>
